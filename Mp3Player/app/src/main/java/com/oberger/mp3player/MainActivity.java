@@ -13,17 +13,20 @@ import java.util.List;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumSelectedListener {
 
     private final static int PERMISSION_REQUEST_CODE = 1337;
+
+    private void loadAlbumFragment() {
+        // Permissions are assumed to be checked here.
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PERMISSION_GRANTED) {
-            List<TrackFileInfo> tracks = TrackFileInfoProvider.queryAlbumTracks(this, 0);
-            Log.d(this.getClass().getSimpleName(), "Found '" + tracks.size() + "' tracks.");
+            loadAlbumFragment();
         }
         else {
             askPermission();
@@ -42,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             // Our permission
             if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
-                // TODO: (Important) Query stuff again and update view.
-                List<ArtistFileInfo> artist = ArtistFileInfoProvider.queryAllArtists(this);
-                Log.d(this.getClass().getSimpleName(), "Found '" + artist.size() + "' artists.");
+                loadAlbumFragment();
             }
             else {
                 Toast.makeText(getApplicationContext(), "Kein Zugriff auf Songs erlaubt.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    public void onAlbumSelected(int id) {
+        // TODO: Implement.
+        Log.d(this.getClass().getSimpleName(), "Selected album!");
     }
 }

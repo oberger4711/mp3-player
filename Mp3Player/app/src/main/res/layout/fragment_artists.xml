@@ -1,8 +1,9 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.oberger.mp3player.ArtistsFragment">
+    tools:context="com.oberger.mp3player.AlbumFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <RelativeLayout
@@ -10,52 +11,85 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/layout_album_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/artists"
-                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textSize="30sp"
-                android:fontFamily="sans-serif" />
+                android:orientation="vertical">
 
-            <ListView
+                <TextView
+                    android:id="@+id/label_album"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/album"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/label_artist"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/artist"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/label_number_of_songs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="@string/num_songs"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/textView"
-                android:layout_alignParentLeft="false"
-                android:layout_alignParentStart="false" >
-            </ListView>
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/layout_album_info">
 
-        </LinearLayout>
+                <ImageButton
+                    android:id="@+id/button_previous_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_left_black" />
 
-        <RelativeLayout
-            android:id="@+id/artists_button_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true">
+                <ImageButton
+                    android:id="@+id/button_next_album"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_keyboard_arrow_right_black" />
 
-            <Button
-                android:text="@string/left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button_left"
-                android:textSize="30sp" />
+                <ImageView
+                    android:id="@+id/image_cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_toLeftOf="@id/button_next_album"
+                    android:layout_toRightOf="@id/button_previous_album"
+                    android:src="@drawable/ic_music_note_black_24dp" />
+            </RelativeLayout>
 
-            <Button
-                android:text="@string/right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/button_right"
-                android:textSize="30sp"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true" />
         </RelativeLayout>
+
     </RelativeLayout>
 
 </FrameLayout>

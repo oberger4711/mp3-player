@@ -7,16 +7,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ArtistsFragment extends Fragment {
+public class AlbumFragment extends Fragment {
 
-    private OnArtistSelectedListener artistSelectedListener;
+    private OnAlbumSelectedListener albumSelectedListener;
 
-    public ArtistsFragment() {
+    public AlbumFragment() {
         // Required empty public constructor
     }
 
-    public static ArtistsFragment newInstance() {
-        ArtistsFragment fragment = new ArtistsFragment();
+    public static AlbumFragment newInstance() {
+        AlbumFragment fragment = new AlbumFragment();
         return fragment;
     }
 
@@ -30,22 +30,22 @@ public class ArtistsFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnArtistSelectedListener) {
-            artistSelectedListener = (OnArtistSelectedListener) context;
+        if (context instanceof OnAlbumSelectedListener) {
+            albumSelectedListener = (OnAlbumSelectedListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnArtistSelectedListener");
+                    + " must implement OnAlbumSelectedListener");
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        artistSelectedListener = null;
+        albumSelectedListener = null;
     }
 
-    public interface OnArtistSelectedListener {
+    public interface OnAlbumSelectedListener {
         // TODO: Update argument type and name
-        void onArtistSelected(final int id);
+        void onAlbumSelected(final int id);
     }
 }
