@@ -27,31 +27,37 @@
                     android:id="@+id/label_album"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
+                    android:lines="1"
                     android:text="@string/album"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/label_artist"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
+                    android:lines="1"
                     android:text="@string/artist"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:textSize="30sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/label_number_of_songs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
-                    android:text="@string/num_songs"
+                    android:lines="1"
+                    android:text="@string/num_songs_none"
                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                    android:textSize="20sp" />
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -85,7 +91,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_toLeftOf="@id/button_next_album"
                     android:layout_toRightOf="@id/button_previous_album"
-                    android:src="@drawable/ic_music_note_black_24dp" />
+                    android:src="@drawable/ic_music_note_black" />
             </RelativeLayout>
 
         </RelativeLayout>

@@ -3,5 +3,8 @@
 
     <string name="artist">Unbekannter Künstler</string>
     <string name="album">Unbekanntes Album</string>
-    <string name="num_songs">0 Stücke</string>
+    <string name="num_songs_none">Keine Stücke</string>
+    <string name="num_songs">%1$d Stücke</string>
+    <string name="no_permission">Keine Berechtigung für das Lesen von Media-Dateien erteilt.</string>
+    <string name="track">Unbekanntes Stück</string>
 </resources>

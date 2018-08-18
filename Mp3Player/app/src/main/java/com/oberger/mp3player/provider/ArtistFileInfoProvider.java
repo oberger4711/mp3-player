@@ -1,10 +1,13 @@
-package com.oberger.mp3player;
+package com.oberger.mp3player.provider;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+
+import com.oberger.mp3player.AlbumFileInfo;
+import com.oberger.mp3player.ArtistFileInfo;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -16,6 +19,8 @@ import java.util.Set;
  */
 
 public class ArtistFileInfoProvider {
+
+    private ArtistFileInfoProvider() {}
 
     public static List<ArtistFileInfo> queryAllArtists(final Context context) {
         List<ArtistFileInfo> artists = new ArrayList<>();
@@ -29,23 +34,24 @@ public class ArtistFileInfoProvider {
         String sortOrder = MediaStore.Audio.Media.ARTIST + " ASC";
         Cursor cursor = context.getContentResolver().query(externalUri, proj, selection, selectionArgs, sortOrder);
 
-        Set<Integer> artistIds = new HashSet<>();
+        final Set<Integer> artistIds = new HashSet<>();
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
                     try {
                         // ID
-                        final int colId = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID);
-                        final int id = cursor.getInt(colId);
+                        final int colArtistId = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST_ID);
+                        final int artistId = cursor.getInt(colArtistId);
                         // Artist
-                        final int colName = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
-                        final String name = cursor.getString(colName);
+                        final int colArtistName = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
+                        final String artistName = cursor.getString(colArtistName);
 
-                        if (!artistIds.contains(id)) {
+                        if (!artistIds.contains(artistId)) {
                             // Get only distinct artists.
-                            artists.add(new ArtistFileInfo(id, name));
-                            artistIds.add(id);
-                            Log.d(ArtistFileInfoProvider.class.getSimpleName(), "Artist " + name + " with id " + id);
+                            final List<AlbumFileInfo> albums = AlbumFileInfoProvider.queryAlbums(context, artistId);
+                            artists.add(new ArtistFileInfo(artistId, artistName, albums));
+                            artistIds.add(artistId);
+                            Log.d(ArtistFileInfoProvider.class.getSimpleName(), "Artist " + artistName + " with id " + artistId);
                         }
                     } catch (IllegalArgumentException e) {
                         // Could not load a music file.

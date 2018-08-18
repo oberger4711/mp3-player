@@ -1,34 +1,39 @@
 package com.oberger.mp3player;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.oberger.mp3player.service.PlayerService;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class MainActivity extends AppCompatActivity implements AlbumFragment.OnAlbumSelectedListener {
+public class MainActivity extends AppCompatActivity implements QueueListener {
 
     private final static int PERMISSION_REQUEST_CODE = 1337;
-
-    private void loadAlbumFragment() {
-        // Permissions are assumed to be checked here.
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Check permission.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PERMISSION_GRANTED) {
             loadAlbumFragment();
         }
         else {
+            // Show no permission until it is clear that the app has the permission.
+            loadNoPermissionFragment();
             askPermission();
             // Music will be loaded on callback.
         }
@@ -47,15 +52,40 @@ public class MainActivity extends AppCompatActivity implements AlbumFragment.OnA
             if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                 loadAlbumFragment();
             }
-            else {
-                Toast.makeText(getApplicationContext(), "Kein Zugriff auf Songs erlaubt.", Toast.LENGTH_LONG).show();
-            }
         }
     }
 
+    private void loadNoPermissionFragment() {
+        final NoPermissionFragment noPermissionFragment = new NoPermissionFragment();
+        loadFragmentNoBackStack(noPermissionFragment);
+    }
+
+    private void loadAlbumFragment() {
+        // Permissions are assumed to be checked here.
+        final AlbumFragment albumFragment = new AlbumFragment();
+        loadFragmentNoBackStack(albumFragment);
+    }
+
+    private void loadFragmentNoBackStack(final Fragment fragment) {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.findFragmentById(R.id.container_main_fragment) == null) {
+            // Add.
+            fragmentManager.beginTransaction().add(R.id.container_main_fragment, fragment).commitNowAllowingStateLoss();
+        }
+        else {
+            // Replace.
+            fragmentManager.beginTransaction().replace(R.id.container_main_fragment, fragment).commitNowAllowingStateLoss();
+        }
+        fragmentManager.executePendingTransactions();
+    }
+
     @Override
-    public void onAlbumSelected(int id) {
-        // TODO: Implement.
-        Log.d(this.getClass().getSimpleName(), "Selected album!");
+    public void changeQueue(final List<TrackFileInfo> queue) {
+        final Intent startIntent = new Intent(this, PlayerService.class);
+        startIntent.setAction(PlayerService.ACTION_START);
+        final ArrayList<TrackFileInfo> queueArray = new ArrayList<>(queue);
+        startIntent.putParcelableArrayListExtra(PlayerService.PARAM_KEY_QUEUE, queueArray);
+        Log.d(this.getClass().getSimpleName(), "Passing queue to service.");
+        startService(startIntent);
     }
 }
