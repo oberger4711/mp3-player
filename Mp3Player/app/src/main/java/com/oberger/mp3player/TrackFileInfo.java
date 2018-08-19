@@ -14,21 +14,24 @@ public class TrackFileInfo implements Comparator<TrackFileInfo>, Parcelable {
     private final String id;
     private final String filePath;
     private final String title;
+    private final String artist;
     private int trackNumber;
 
-    public TrackFileInfo(final String id, final String filePath, final String title) {
+    public TrackFileInfo(final String id, final String filePath, final String title, final String artist) {
         this.id = id;
         this.filePath = filePath;
         this.title = title;
+        this.artist = artist;
         this.trackNumber = -1;
     }
 
     private TrackFileInfo(final Parcel source) {
-        String[] strings = new String[3];
+        String[] strings = new String[4];
         source.readStringArray(strings);
         this.id = strings[0];
         this.filePath = strings[1];
         this.title = strings[2];
+        this.artist = strings[3];
         this.trackNumber = source.readInt();
     }
 
@@ -42,6 +45,10 @@ public class TrackFileInfo implements Comparator<TrackFileInfo>, Parcelable {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getArtist() {
+        return artist;
     }
 
     public int getTrackNumber() {
@@ -87,7 +94,8 @@ public class TrackFileInfo implements Comparator<TrackFileInfo>, Parcelable {
         dest.writeStringArray(new String[] {
                 id,
                 filePath,
-                title
+                title,
+                artist
         });
         dest.writeInt(trackNumber);
     }

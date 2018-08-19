@@ -26,7 +26,8 @@ public class TrackFileInfoProvider {
                 MediaStore.Audio.Media._ID,
                 MediaStore.Audio.Media.TITLE,
                 MediaStore.Audio.Media.DATA,
-                MediaStore.Audio.Media.TRACK};
+                MediaStore.Audio.Media.TRACK,
+                MediaStore.Audio.Media.ARTIST};
         String selection = MediaStore.Audio.Media.ALBUM_ID + "=" + Integer.toString(albumIdSelection);
         String[] selectionArgs = null;
         String sortOrder = MediaStore.Audio.Media.TRACK + " ASC";
@@ -47,8 +48,11 @@ public class TrackFileInfoProvider {
                         // Name
                         final int colFileName = audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                         final String fileName = audioCursor.getString(colFileName);
+                        // Artist
+                        final int colArtist = audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
+                        final String artistName = audioCursor.getString(colArtist);
 
-                        fileInfo = new TrackFileInfo(id, fileName, title);
+                        fileInfo = new TrackFileInfo(id, fileName, title, artistName);
                     } catch (IllegalArgumentException e) {
                         // Could not load a music file.
                         Log.i(TrackFileInfoProvider.class.getSimpleName(), "Skipping a file that could not be parsed.");
