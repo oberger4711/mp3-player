@@ -76,6 +76,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         }
         else if (ACTION_STOP.equals(ACTION_STOP)) {
             Log.d(this.getClass().getSimpleName(), "Received stop intent. Stopping self.");
+            mediaPlayer.reset();
             stopForeground(true);
             stopSelf();
         }
@@ -92,18 +93,25 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     }
 
     private Notification buildNotification() {
-        // Show notification that launches the activity on click.
+        // Touch intent.
         final Intent launchActivityIntent = new Intent(this, MainActivity.class);
         launchActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, launchActivityIntent, 0);
+        final PendingIntent pendingLaunchActivityIntent = PendingIntent.getActivity(this, 0, launchActivityIntent, 0);
+        /*
+        // Swipe intent.
+        final Intent killServiceIntent = new Intent(this, PlayerService.class);
+        killServiceIntent.setAction(ACTION_STOP);
+        final PendingIntent pendingKillServiceIntent = PendingIntent.getService(this, 0, killServiceIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        */
+        // Information.
         final String appName = getString(R.string.app_name);
         final String trackName = currentTrack != null ? currentTrack.getTitle() : "";
         return new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_play_arrow_black)
+                .setSmallIcon(R.drawable.ic_music_note_black)
                 .setContentTitle(appName)
                 .setTicker(appName)
                 .setContentText(trackName)
-                .setContentIntent(pendingIntent)
+                .setContentIntent(pendingLaunchActivityIntent)
                 .setOngoing(true)
                 .build();
     }
@@ -125,10 +133,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             mediaPlayer.prepare();
             mediaPlayer.start();
             Log.d(this.getClass().getSimpleName(), "Media Player started.");
-            // Update state.
-            sendState();
-            // Update notification.
-            NotificationManagerCompat.from(this).notify(SERVICE_ID, buildNotification());
+            updateState();
         } catch (final Exception e) {
             e.printStackTrace();
             Log.e(this.getClass().getSimpleName(), "Could not playback track '" + filePath + "'. Skipping. " + e.getMessage());
@@ -136,6 +141,15 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             mediaPlayer.reset();
         }
         return true;
+    }
+
+    private void updateState() {
+        updateNotification();
+        sendState();
+    }
+
+    private void updateNotification() {
+        NotificationManagerCompat.from(this).notify(SERVICE_ID, buildNotification());
     }
 
     private void sendState() {
@@ -201,6 +215,6 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         else {
             Log.e(PlayerService.this.getClass().getSimpleName(), "Tried to toggle status without current track.");
         }
-        sendState();
+        updateState();
     }
 }

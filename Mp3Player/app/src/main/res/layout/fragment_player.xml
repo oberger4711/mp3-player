@@ -33,7 +33,7 @@
             android:id="@+id/label_playing_track"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/track"
+            android:text=""
             android:textSize="15sp"
             android:textColor="@color/textWhite"/>
 
@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/label_playing_track"
-            android:text="@string/artist"
+            android:text=""
             android:textSize="10sp"
             android:textColor="@color/textWhite"/>
 
