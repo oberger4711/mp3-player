@@ -1,7 +1,6 @@
 package com.oberger.mp3player.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -15,7 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 
-import com.oberger.mp3player.MainActivity;
+import com.oberger.mp3player.PlayerActivity;
 import com.oberger.mp3player.R;
 import com.oberger.mp3player.TrackFileInfo;
 
@@ -88,13 +87,16 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(broadcastReceiver);
+        try {
+            unregisterReceiver(broadcastReceiver);
+        } catch (final IllegalArgumentException e) {
+        }
         super.onDestroy();
     }
 
     private Notification buildNotification() {
         // Touch intent.
-        final Intent launchActivityIntent = new Intent(this, MainActivity.class);
+        final Intent launchActivityIntent = new Intent(this, PlayerActivity.class);
         launchActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         final PendingIntent pendingLaunchActivityIntent = PendingIntent.getActivity(this, 0, launchActivityIntent, 0);
         /*

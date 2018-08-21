@@ -7,10 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.Toast;
+import android.view.MenuItem;
 
 import com.oberger.mp3player.service.PlayerService;
 
@@ -19,14 +20,14 @@ import java.util.List;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class MainActivity extends AppCompatActivity implements QueueListener {
+public class PlayerActivity extends AppCompatActivity implements QueueListener {
 
     private final static int PERMISSION_REQUEST_CODE = 1337;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_player);
         // Check permission.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PERMISSION_GRANTED) {
             loadAlbumFragment();
@@ -87,5 +88,26 @@ public class MainActivity extends AppCompatActivity implements QueueListener {
         startIntent.putParcelableArrayListExtra(PlayerService.PARAM_KEY_QUEUE, queueArray);
         Log.d(this.getClass().getSimpleName(), "Passing queue to service.");
         startService(startIntent);
+    }
+
+    private void stopPlayer() {
+        final Intent stopIntent = new Intent(this, PlayerService.class);
+        stopIntent.setAction(PlayerService.ACTION_STOP);
+        Log.d(this.getClass().getSimpleName(), "Stopping service.");
+        startService(stopIntent);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // Respond to the action bar's Up/Home button
+                stopPlayer();
+                this.finish();
+                final Intent intent = new Intent(this, MenuActivity.class);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
