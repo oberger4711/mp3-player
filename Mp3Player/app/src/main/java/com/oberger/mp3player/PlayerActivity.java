@@ -97,17 +97,27 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
         startService(stopIntent);
     }
 
+    private void returnToMenu() {
+        stopPlayer();
+        this.finish();
+        final Intent intent = new Intent(this, MenuActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
                 // Respond to the action bar's Up/Home button
-                stopPlayer();
-                this.finish();
-                final Intent intent = new Intent(this, MenuActivity.class);
-                startActivity(intent);
+                returnToMenu();
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        returnToMenu();
     }
 }
