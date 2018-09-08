@@ -24,18 +24,23 @@ public class MenuActivity extends AppCompatActivity {
         buttonAllAlbums.setOnClickListener(new AllAlbumsClickListener());
     }
 
+    private void openPlayerActivity(final String navigationMode) {
+        final Intent i = new Intent(MenuActivity.this, PlayerActivity.class);
+        i.putExtra(PlayerActivity.PARAM_NAVIGATION_MODE, navigationMode);
+        startActivity(i);
+    }
+
     private class AllTracksClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            // TODO
+            openPlayerActivity(PlayerActivity.NAVIGATION_MODE_SINGLE_TRACKS);
         }
     }
 
     private class AllAlbumsClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            final Intent i = new Intent(MenuActivity.this, PlayerActivity.class);
-            startActivity(i);
+            openPlayerActivity(PlayerActivity.NAVIGATION_MODE_ALBUMS);
         }
     }
 }

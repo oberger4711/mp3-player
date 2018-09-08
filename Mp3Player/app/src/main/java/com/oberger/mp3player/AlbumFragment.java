@@ -51,20 +51,19 @@ public class AlbumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View layout = inflater.inflate(R.layout.fragment_album, container, false);
-        labelArtist = (TextView) layout.findViewById(R.id.label_artist);
-        labelAlbum = (TextView) layout.findViewById(R.id.label_album);
-        labelNumSongs = (TextView) layout.findViewById(R.id.label_number_of_songs);
-        imageAlbumCover = (ImageView) layout.findViewById(R.id.image_cover);
-        buttonPreviousAlbum = (ImageButton) layout.findViewById(R.id.button_previous_album);
-        buttonNextAlbum = (ImageButton) layout.findViewById(R.id.button_next_album);
+        View view = inflater.inflate(R.layout.fragment_album, container, false);
+        labelArtist = (TextView) view.findViewById(R.id.label_artist);
+        labelAlbum = (TextView) view.findViewById(R.id.label_album);
+        labelNumSongs = (TextView) view.findViewById(R.id.label_number_of_songs);
+        imageAlbumCover = (ImageView) view.findViewById(R.id.image_cover);
+        buttonPreviousAlbum = (ImageButton) view.findViewById(R.id.button_previous_album);
+        buttonNextAlbum = (ImageButton) view.findViewById(R.id.button_next_album);
 
         imageAlbumCover.setOnClickListener(new PlayAlbumClickListener());
         buttonPreviousAlbum.setOnClickListener(new PreviousAlbumClickListener());
         buttonNextAlbum.setOnClickListener(new NextAlbumClickListener());
         displayCurrentAlbum();
-        return layout;
+        return view;
     }
 
     private void displayCurrentAlbum() {

@@ -19,6 +19,10 @@ public class TrackFileInfoProvider {
 
     private TrackFileInfoProvider() {}
 
+    public static List<TrackFileInfo> queryAllTracks(final Context context) {
+        return queryAlbumTracks(context, -1);
+    }
+
     public static List<TrackFileInfo> queryAlbumTracks(final Context context, final int albumIdSelection) {
         List<TrackFileInfo> tracks = new ArrayList<>();
         Uri externalUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -28,9 +32,19 @@ public class TrackFileInfoProvider {
                 MediaStore.Audio.Media.DATA,
                 MediaStore.Audio.Media.TRACK,
                 MediaStore.Audio.Media.ARTIST};
-        String selection = MediaStore.Audio.Media.ALBUM_ID + "=" + Integer.toString(albumIdSelection);
+        String selection;
+        String sortOrder;
+        if (albumIdSelection >= 0) {
+            // Specific album.
+            selection = MediaStore.Audio.Media.ALBUM_ID + "=" + Integer.toString(albumIdSelection);
+            sortOrder = MediaStore.Audio.Media.TRACK + " ASC";
+        }
+        else {
+            // No specific album.
+            selection = "";
+            sortOrder = MediaStore.Audio.Media.TITLE;
+        }
         String[] selectionArgs = null;
-        String sortOrder = MediaStore.Audio.Media.TRACK + " ASC";
         Cursor audioCursor = context.getContentResolver().query(externalUri, proj, selection, selectionArgs, sortOrder);
 
         if (audioCursor != null) {

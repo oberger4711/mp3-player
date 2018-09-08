@@ -22,6 +22,10 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class PlayerActivity extends AppCompatActivity implements QueueListener {
 
+    public final static String PARAM_NAVIGATION_MODE = "NAV_MODE_ALBUMS";
+    public final static String NAVIGATION_MODE_ALBUMS = "NAV_MODE_ALBUMS";
+    public final static String NAVIGATION_MODE_SINGLE_TRACKS = "NAV_MODE_SINGLE_TRACKS";
+
     private final static int PERMISSION_REQUEST_CODE = 1337;
 
     @Override
@@ -30,7 +34,7 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
         setContentView(R.layout.activity_player);
         // Check permission.
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_CALENDAR) == PERMISSION_GRANTED) {
-            loadAlbumFragment();
+            loadNavigationFragment();
         }
         else {
             // Show no permission until it is clear that the app has the permission.
@@ -51,7 +55,7 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             // Our permission
             if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
-                loadAlbumFragment();
+                loadNavigationFragment();
             }
         }
     }
@@ -61,10 +65,21 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
         loadFragmentNoBackStack(noPermissionFragment);
     }
 
-    private void loadAlbumFragment() {
+    private void loadNavigationFragment() {
         // Permissions are assumed to be checked here.
-        final AlbumFragment albumFragment = new AlbumFragment();
-        loadFragmentNoBackStack(albumFragment);
+        final String navMode = getIntent().getStringExtra(PARAM_NAVIGATION_MODE);
+        if (NAVIGATION_MODE_ALBUMS.equals(navMode)) {
+            final AlbumFragment albumFragment = new AlbumFragment();
+            loadFragmentNoBackStack(albumFragment);
+        }
+        else if (NAVIGATION_MODE_SINGLE_TRACKS.equals(navMode)) {
+            final TrackListFragment tracksFragment = new TrackListFragment();
+            loadFragmentNoBackStack(tracksFragment);
+        }
+        else {
+            Log.e(this.getClass().getSimpleName(), "Invalid navigation mode in activity intent.");
+            returnToMenu();
+        }
     }
 
     private void loadFragmentNoBackStack(final Fragment fragment) {

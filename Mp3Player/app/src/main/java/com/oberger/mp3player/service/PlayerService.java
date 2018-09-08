@@ -31,6 +31,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     public static final String ACTION_TOGGLE_STATUS = "com.oberger.mp3player.service.PlayerService.toggle";
     public static final String ACTION_SEND_STATE = "com.oberger.mp3player.service.PlayerService.sendState";
     public static final String PARAM_KEY_QUEUE = "com.oberger.mp3player.service.PlayerService.queue";
+    public static final String PARAM_NAVIGATION_MODE = "com.oberger.mp3player.service.PlayerService.navigationMode";
 
     public static final String ACTION_STATE = "com.oberger.mp3player.service.PlayerService.state";
     public static final String PARAM_KEY_STATE_CURRENT_TRACK = "com.oberger.mp3player.service.PlayerService.currentTrack";
@@ -41,6 +42,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
 
     private final PlayerBroadcastReceiver broadcastReceiver;
     private Queue<TrackFileInfo> queue;
+    private String navigationMode;
     private TrackFileInfo currentTrack;
     private final MediaPlayer mediaPlayer;
 
@@ -55,19 +57,24 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (ACTION_START.equals(intent.getAction())) {
             if (intent.hasExtra(PARAM_KEY_QUEUE)) {
-                // Parse the queue to play back.
-                final ArrayList<TrackFileInfo> queue = intent.getParcelableArrayListExtra(PARAM_KEY_QUEUE);
-                this.queue = new LinkedList<>(queue);
-                // Start playback.
-                if (playNextTrack()) {
-                    Log.d(this.getClass().getSimpleName(), "Received start intent. Starting self.");
-                    // Register intent receiver.
-                    registerReceiver(broadcastReceiver, broadcastReceiver.buildIntentFilter());
-                    // Start.
-                    startForeground(SERVICE_ID, buildNotification());
+                if (intent.hasExtra(PARAM_NAVIGATION_MODE)) {
+                    navigationMode = intent.getStringExtra(PARAM_NAVIGATION_MODE);
+                    // Parse the queue to play back.
+                    final ArrayList<TrackFileInfo> queue = intent.getParcelableArrayListExtra(PARAM_KEY_QUEUE);
+                    this.queue = new LinkedList<>(queue);
+                    // Start playback.
+                    if (playNextTrack()) {
+                        Log.d(this.getClass().getSimpleName(), "Received start intent. Starting self.");
+                        // Register intent receiver.
+                        registerReceiver(broadcastReceiver, broadcastReceiver.buildIntentFilter());
+                        // Start.
+                        startForeground(SERVICE_ID, buildNotification());
+                    } else {
+                        Log.e(this.getClass().getSimpleName(), "Received empty queue for playback.");
+                    }
                 }
                 else {
-                    Log.e(this.getClass().getSimpleName(), "Received empty queue for playback.");
+                    Log.e(this.getClass().getSimpleName(), "Received start intent does not have the expected parameter '" + PARAM_NAVIGATION_MODE + "'.");
                 }
             } else {
                 Log.e(this.getClass().getSimpleName(), "Received start intent does not have the expected parameter '" + PARAM_KEY_QUEUE + "'.");
@@ -98,6 +105,7 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         // Touch intent.
         final Intent launchActivityIntent = new Intent(this, PlayerActivity.class);
         launchActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        launchActivityIntent.putExtra(PlayerActivity.PARAM_NAVIGATION_MODE, navigationMode);
         final PendingIntent pendingLaunchActivityIntent = PendingIntent.getActivity(this, 0, launchActivityIntent, 0);
         /*
         // Swipe intent.

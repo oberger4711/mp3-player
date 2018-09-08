@@ -30,18 +30,22 @@
         android:layout_alignParentLeft="true">
 
         <TextView
-            android:id="@+id/label_playing_track"
+            android:id="@+id/label_playing_track_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:lines="1"
+            android:ellipsize="end"
             android:text=""
             android:textSize="15sp"
             android:textColor="@color/textWhite"/>
 
         <TextView
-            android:id="@+id/label_playing_artist"
+            android:id="@+id/label_playing_track_artist_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/label_playing_track"
+            android:layout_below="@id/label_playing_track_name"
+            android:lines="1"
+            android:ellipsize="end"
             android:text=""
             android:textSize="10sp"
             android:textColor="@color/textWhite"/>

@@ -37,8 +37,8 @@ public class PlayerFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_player, container, false);
         buttonPlayPause = (ImageButton) view.findViewById(R.id.button_play_pause);
-        labelPlayingTrack = (TextView) view.findViewById(R.id.label_playing_track);
-        labelPlayingArtist = (TextView) view.findViewById(R.id.label_playing_artist);
+        labelPlayingTrack = (TextView) view.findViewById(R.id.label_playing_track_name);
+        labelPlayingArtist = (TextView) view.findViewById(R.id.label_playing_track_artist_name);
 
         buttonPlayPause.setOnClickListener(new PlayPauseClickListener());
         buttonPlayPause.setAlpha(0.5f);
