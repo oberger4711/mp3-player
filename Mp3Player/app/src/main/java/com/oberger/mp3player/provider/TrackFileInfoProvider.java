@@ -81,7 +81,6 @@ public class TrackFileInfoProvider {
                             Log.i(TrackFileInfoProvider.class.getSimpleName(), "Skipping optional album name for '" + fileInfo.getTitle() + "'.");
                         }
                         tracks.add(fileInfo);
-                        Log.d(TrackFileInfoProvider.class.getSimpleName(), fileInfo.getTitle());
                     }
                 }
                 while (audioCursor.moveToNext());
