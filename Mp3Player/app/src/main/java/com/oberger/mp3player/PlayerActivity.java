@@ -77,7 +77,7 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
             loadFragmentNoBackStack(tracksFragment);
         }
         else {
-            Log.e(this.getClass().getSimpleName(), "Invalid navigation mode in activity intent.");
+            Log.e(this.getClass().getSimpleName(), "Invalid navigation mode in activity intent '" + navMode + "'.");
             returnToMenu();
         }
     }
@@ -99,6 +99,7 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
     public void changeQueue(final List<TrackFileInfo> queue) {
         final Intent startIntent = new Intent(this, PlayerService.class);
         startIntent.setAction(PlayerService.ACTION_START);
+        startIntent.putExtra(PlayerService.PARAM_NAVIGATION_MODE, getIntent().getStringExtra(PARAM_NAVIGATION_MODE));
         final ArrayList<TrackFileInfo> queueArray = new ArrayList<>(queue);
         startIntent.putParcelableArrayListExtra(PlayerService.PARAM_KEY_QUEUE, queueArray);
         Log.d(this.getClass().getSimpleName(), "Passing queue to service.");

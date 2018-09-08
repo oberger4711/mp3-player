@@ -117,7 +117,7 @@ public class AlbumFragment extends Fragment {
             queueListener = (QueueListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnAlbumSelectedListener");
+                    + " must implement QueueListener");
         }
     }
 

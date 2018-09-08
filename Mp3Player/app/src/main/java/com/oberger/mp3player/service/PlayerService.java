@@ -105,8 +105,9 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
         // Touch intent.
         final Intent launchActivityIntent = new Intent(this, PlayerActivity.class);
         launchActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        Log.d(this.getClass().getSimpleName(), "Putting extra navigation mode '" + navigationMode + "'.");
         launchActivityIntent.putExtra(PlayerActivity.PARAM_NAVIGATION_MODE, navigationMode);
-        final PendingIntent pendingLaunchActivityIntent = PendingIntent.getActivity(this, 0, launchActivityIntent, 0);
+        final PendingIntent pendingLaunchActivityIntent = PendingIntent.getActivity(this, 1337331, launchActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         /*
         // Swipe intent.
         final Intent killServiceIntent = new Intent(this, PlayerService.class);

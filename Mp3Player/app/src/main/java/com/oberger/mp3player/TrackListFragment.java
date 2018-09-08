@@ -1,6 +1,7 @@
 package com.oberger.mp3player;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -17,6 +19,7 @@ import android.widget.RelativeLayout;
 import com.oberger.mp3player.provider.TrackFileInfoProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -31,6 +34,7 @@ public class TrackListFragment extends Fragment {
     private int numberOfTracksPerPage;
     private final TrackLayoutListener trackLayoutListener;
     private Handler handler;
+    private QueueListener queueListener;
 
     // UI elements
     private ImageButton buttonPreviousPage;
@@ -44,6 +48,17 @@ public class TrackListFragment extends Fragment {
         indexFirstTrackOnPage = 0;
         numberOfTracksPerPage = -1;
         trackLayoutListener = new TrackLayoutListener();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof QueueListener) {
+            queueListener = (QueueListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement QueueListener");
+        }
     }
 
     @Override
@@ -124,6 +139,7 @@ public class TrackListFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        listViewTracks.setOnItemClickListener(new ClickedTrackListener());
                         displayCurrentAlbum();
                     }
                 });
@@ -144,6 +160,16 @@ public class TrackListFragment extends Fragment {
         public void onClick(View v) {
             indexFirstTrackOnPage = Math.min(allTracks.size() - 1, indexFirstTrackOnPage + numberOfTracksPerPage);
             displayCurrentAlbum();
+        }
+    }
+
+    private class ClickedTrackListener implements ListView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            if (queueListener != null) {
+                queueListener.changeQueue(Arrays.asList(currentPageTracks.get(i)));
+            }
         }
     }
 }
