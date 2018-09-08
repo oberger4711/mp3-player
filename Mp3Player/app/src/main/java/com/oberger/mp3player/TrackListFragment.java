@@ -17,8 +17,6 @@ import android.widget.RelativeLayout;
 import com.oberger.mp3player.provider.TrackFileInfoProvider;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 
@@ -42,7 +40,7 @@ public class TrackListFragment extends Fragment {
 
     public TrackListFragment() {
         currentPageTracks = new ArrayList<>();
-        currentPageTracks.add(DUMMY_TRACK);
+        currentPageTracks.add(DUMMY_TRACK); // Used for measuring.
         indexFirstTrackOnPage = 0;
         numberOfTracksPerPage = -1;
         trackLayoutListener = new TrackLayoutListener();
@@ -65,6 +63,7 @@ public class TrackListFragment extends Fragment {
     }
 
     private int measurePage() {
+        assert(containerPage != null);
         return containerPage.getHeight();
     }
 
@@ -82,13 +81,20 @@ public class TrackListFragment extends Fragment {
         return changed;
     }
 
-    private void showCurrentPage() {
+    private void displayCurrentAlbum() {
         currentPageTracks.clear();
         final int end = Math.min(indexFirstTrackOnPage + numberOfTracksPerPage, allTracks.size());
         for (int i = indexFirstTrackOnPage; i < end; ++i) {
             currentPageTracks.add(allTracks.get(i));
         }
         currentPageTracksAdapter.notifyDataSetChanged();
+        // Update buttons.
+        final boolean hasPrevious = indexFirstTrackOnPage > 0;
+        final boolean hasNext = indexFirstTrackOnPage + numberOfTracksPerPage < allTracks.size() - 1;
+        buttonPreviousPage.setClickable(hasPrevious);
+        buttonPreviousPage.setAlpha(hasPrevious ? 1.0f : 0.5f);
+        buttonNextPage.setClickable(hasNext);
+        buttonNextPage.setAlpha(hasNext ? 1.0f : 0.5f);
     }
 
     @Override
@@ -99,6 +105,12 @@ public class TrackListFragment extends Fragment {
         buttonNextPage = (ImageButton) view.findViewById(R.id.button_next_page);
         listViewTracks = (ListView) view.findViewById(R.id.list_view_tracks);
         containerPage = (RelativeLayout) view.findViewById(R.id.layout_track_list_container);
+
+        buttonPreviousPage.setClickable(false);
+        buttonNextPage.setClickable(true);
+
+        buttonPreviousPage.setOnClickListener(new PreviousPageClickListener());
+        buttonNextPage.setOnClickListener(new NextPageClickListener());
         listViewTracks.setAdapter(currentPageTracksAdapter);
         listViewTracks.getViewTreeObserver().addOnGlobalLayoutListener(trackLayoutListener);
 
@@ -112,10 +124,26 @@ public class TrackListFragment extends Fragment {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        showCurrentPage();
+                        displayCurrentAlbum();
                     }
                 });
             }
+        }
+    }
+
+    private class PreviousPageClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            indexFirstTrackOnPage = Math.max(0, indexFirstTrackOnPage - numberOfTracksPerPage);
+            displayCurrentAlbum();
+        }
+    }
+
+    private class NextPageClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            indexFirstTrackOnPage = Math.min(allTracks.size() - 1, indexFirstTrackOnPage + numberOfTracksPerPage);
+            displayCurrentAlbum();
         }
     }
 }
