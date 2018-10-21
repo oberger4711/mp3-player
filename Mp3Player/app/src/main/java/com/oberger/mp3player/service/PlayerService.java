@@ -138,8 +138,9 @@ public class PlayerService extends Service implements MediaPlayer.OnCompletionLi
             // Playback.
             if (mediaPlayer.isPlaying()) {
                 Log.d(this.getClass().getSimpleName(), "Media Player was already playing. Resetting.");
-                mediaPlayer.reset();
+                mediaPlayer.stop();
             }
+            mediaPlayer.reset();
             mediaPlayer.setDataSource(filePath);
             mediaPlayer.prepare();
             mediaPlayer.start();
