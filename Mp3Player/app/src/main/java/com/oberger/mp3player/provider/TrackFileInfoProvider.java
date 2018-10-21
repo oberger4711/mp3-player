@@ -3,6 +3,7 @@ package com.oberger.mp3player.provider;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
@@ -49,6 +50,7 @@ public class TrackFileInfoProvider {
 
         if (audioCursor != null) {
             if (audioCursor.moveToFirst()) {
+                final String musicDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
                 do {
                     // Parse necessary meta data.
                     TrackFileInfo fileInfo = null;
@@ -62,11 +64,15 @@ public class TrackFileInfoProvider {
                         // Name
                         final int colFileName = audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
                         final String fileName = audioCursor.getString(colFileName);
+
                         // Artist
                         final int colArtist = audioCursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST);
                         final String artistName = audioCursor.getString(colArtist);
 
-                        fileInfo = new TrackFileInfo(id, fileName, title, artistName);
+                        // Check if in music directory.
+                        if (fileName.startsWith(musicDir)) {
+                            fileInfo = new TrackFileInfo(id, fileName, title, artistName);
+                        }
                     } catch (IllegalArgumentException e) {
                         // Could not load a music file.
                         Log.i(TrackFileInfoProvider.class.getSimpleName(), "Skipping a file that could not be parsed.");

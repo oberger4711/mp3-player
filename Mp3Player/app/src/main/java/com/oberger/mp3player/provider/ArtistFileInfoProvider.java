@@ -49,9 +49,11 @@ public class ArtistFileInfoProvider {
                         if (!artistIds.contains(artistId)) {
                             // Get only distinct artists.
                             final List<AlbumFileInfo> albums = AlbumFileInfoProvider.queryAlbums(context, artistId);
-                            artists.add(new ArtistFileInfo(artistId, artistName, albums));
-                            artistIds.add(artistId);
-                            Log.d(ArtistFileInfoProvider.class.getSimpleName(), "Artist " + artistName + " with id " + artistId);
+                            if (!albums.isEmpty()) {
+                                artists.add(new ArtistFileInfo(artistId, artistName, albums));
+                                artistIds.add(artistId);
+                                Log.d(ArtistFileInfoProvider.class.getSimpleName(), "Artist " + artistName + " with id " + artistId);
+                            }
                         }
                     } catch (IllegalArgumentException e) {
                         // Could not load a music file.
