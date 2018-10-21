@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -130,6 +131,10 @@ public class AlbumFragment extends Fragment {
     private class PlayAlbumClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            final AlphaAnimation anim = new AlphaAnimation(0.2f, 1.f);
+            anim.setDuration(500);
+            anim.setFillAfter(true);
+            imageAlbumCover.startAnimation(anim);
             if (queueListener != null) {
                 if (indexCurrentAlbum < albums.size()) {
                     final AlbumFileInfo currentAlbum = albums.get(indexCurrentAlbum);
