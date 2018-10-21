@@ -38,7 +38,7 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
         }
         else {
             // Show no permission until it is clear that the app has the permission.
-            loadNoPermissionFragment();
+            loadLoadingFragment();
             askPermission();
             // Music will be loaded on callback.
         }
@@ -56,8 +56,15 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
             // Our permission
             if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                 loadNavigationFragment();
+            } else {
+                loadNoPermissionFragment();
             }
         }
+    }
+
+    private void loadLoadingFragment() {
+        final LoadingFragment loadingFragment = new LoadingFragment();
+        loadFragmentNoBackStack(loadingFragment);
     }
 
     private void loadNoPermissionFragment() {

@@ -11,4 +11,7 @@
     <string name="num_songs">%1$d Stücke</string>
     <string name="no_permission">Keine Berechtigung für das Lesen von Media-Dateien erteilt.</string>
     <string name="track">Unbekanntes Stück</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
