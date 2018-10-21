@@ -76,7 +76,7 @@ public class AlbumFragment extends Fragment {
         }
         final float disabledAlpha = 0.5f; // For graying out buttons.
         final boolean hasPrevious = indexCurrentAlbum > 0;
-        final boolean hasNext = indexCurrentAlbum < albums.size();
+        final boolean hasNext = indexCurrentAlbum < albums.size() - 1;
         buttonPreviousAlbum.setClickable(hasPrevious);
         buttonPreviousAlbum.setAlpha(hasPrevious ? 1.0f : disabledAlpha);
         buttonNextAlbum.setClickable(hasNext);
