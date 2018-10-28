@@ -55,10 +55,10 @@ public class AlbumFileInfoProvider {
                             final List<TrackFileInfo> tracks = TrackFileInfoProvider.queryAlbumTracks(context, albumId);
                             if (!tracks.isEmpty()) {
                                 albums.add(new AlbumFileInfo(albumId, albumName, artistName, tracks));
-                                albumIds.add(albumId);
                                 Log.d(ArtistFileInfoProvider.class.getSimpleName(), "Album " + albumName + " with id " + artistId);
                             }
                         }
+                        albumIds.add(albumId);
                     } catch (IllegalArgumentException e) {
                         // Could not load a music file.
                         Log.i(TrackFileInfoProvider.class.getSimpleName(), "Skipping an album that could not be parsed.");
