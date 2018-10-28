@@ -1,6 +1,7 @@
 package com.oberger.mp3player;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,8 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.oberger.mp3player.service.PlayerService;
 
@@ -28,6 +32,8 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
 
     private final static int PERMISSION_REQUEST_CODE = 1337;
 
+    private Button buttonBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +48,8 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
             askPermission();
             // Music will be loaded on callback.
         }
+        buttonBack = (Button) findViewById(R.id.button_back);
+        buttonBack.setOnClickListener(new BackClickListener());
     }
 
     private void askPermission() {
@@ -142,5 +150,13 @@ public class PlayerActivity extends AppCompatActivity implements QueueListener {
     public void onBackPressed() {
         super.onBackPressed();
         returnToMenu();
+    }
+
+    private class BackClickListener implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            returnToMenu();
+        }
     }
 }

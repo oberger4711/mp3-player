@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="50"
-            android:text="@string/all_albums" />
+            android:text="@string/all_albums"
+            android:textSize="25sp" />
 
     </LinearLayout>
     <LinearLayout
@@ -33,7 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="@string/all_tracks" />
+            android:text="@string/all_tracks"
+            android:textSize="25sp" />
     </LinearLayout>
 
 </LinearLayout>

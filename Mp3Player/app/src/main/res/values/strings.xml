@@ -5,6 +5,7 @@
     <string name="all_albums">Alben</string>
 
     <!--Player-->
+    <string name="back">Zurück</string>
     <string name="artist">Unbekannter Künstler</string>
     <string name="album">Unbekanntes Album</string>
     <string name="num_songs_none">Keine Stücke</string>
